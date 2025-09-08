@@ -19,17 +19,19 @@ def scrape_temperature(url: dict):
             driver.get(web_address)
             html = driver.page_source
             soup = BeautifulSoup(html, "html.parser")
-            # print(soup)
+            temperature = soup.find('div', class_='now-weather').get_text()
             date_and_time = datetime.datetime.now().replace(microsecond=0)
             with open('scraps/scraps.txt', 'a', encoding='utf-8') as file:
-                file.write(str(date_and_time) + ' ' + town + ' text' + '\n')
-
+                file.write(f'{date_and_time} {town} {temperature}\n')
 
     finally:
         driver.quit()
 
 
-url = {'Люберцы': 'https://www.gismeteo.ru/weather-lyubertsy-11433/now/'}
+url = {'Люберцы': 'https://www.gismeteo.ru/weather-lyubertsy-11433/now/',
+       'Подольск': 'https://www.gismeteo.ru/weather-podolsk-11955/now/',
+       'Одинцово': 'https://www.gismeteo.ru/weather-odintsovo-11938/now/',
+       'Химки': 'https://www.gismeteo.ru/weather-khimki-11582/now/'}
 
 # while True:
 scrape_temperature(url)
