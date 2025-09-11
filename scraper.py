@@ -10,21 +10,25 @@ def scrape_temperature(url: dict):
     options = Options()
     'Для проверки окна браузера закомментируйте следующую строку'
     options.add_argument('--headless')
-    # options.add_argument("--window-size=1920,1200")
+    options.add_argument("--window-size=1920,1200")
 
     driver = webdriver.Chrome(options=options)
 
-    try:
-        for town, web_address in url.items():
-            driver.get(web_address)
-            html = driver.page_source
-            soup = BeautifulSoup(html, "html.parser")
+    for town, web_address in url.items():
+        driver.get(web_address)
+        date_and_time = datetime.datetime.now().replace(microsecond=0)
+        try:
+            soup = BeautifulSoup(driver.page_source, "html.parser")
             temperature = soup.find('div', class_='now-weather').get_text()
-            date_and_time = datetime.datetime.now().replace(microsecond=0)
             with open('scraps/scraps.txt', 'a', encoding='utf-8') as file:
                 file.write(f'{date_and_time} {town} {temperature}\n')
 
-    finally:
+        except AttributeError:
+            with open('scraps/errors.txt', 'a', encoding='utf-8') as file:
+                file.write(f'{date_and_time} Ошибка при запросе страницы: {town} {web_address}\n')
+            continue
+
+    else:
         driver.quit()
 
 
@@ -33,6 +37,6 @@ url = {'Люберцы': 'https://www.gismeteo.ru/weather-lyubertsy-11433/now/',
        'Одинцово': 'https://www.gismeteo.ru/weather-odintsovo-11938/now/',
        'Химки': 'https://www.gismeteo.ru/weather-khimki-11582/now/'}
 
-# while True:
-scrape_temperature(url)
-# sleep(3600)
+while True:
+    scrape_temperature(url)
+    sleep(3592)
