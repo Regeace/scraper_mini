@@ -39,4 +39,4 @@ url = {'Люберцы': 'https://www.gismeteo.ru/weather-lyubertsy-11433/now/',
 
 while True:
     scrape_temperature(url)
-    sleep(3592)
+    sleep(3590)
