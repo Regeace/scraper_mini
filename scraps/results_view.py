@@ -7,7 +7,7 @@ towns = {'Люберцы': {},
          'Химки': {}}
 
 '''Заполнение данных в towns из scraps[i].txt'''
-with open('scraps1.txt', 'r', encoding='utf-8') as data:
+with open('scraps2.txt', 'r', encoding='utf-8') as data:
     for line in data:
         str_line = line.split()
         date_and_time = strptime(f'{str_line[0]} {str_line[1][:-3]}', '%Y-%m-%d %H:%M')
